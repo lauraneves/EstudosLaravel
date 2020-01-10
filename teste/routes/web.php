@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -26,6 +30,10 @@ Route::get('/about', function () {
         'articles' => $articles
     ]);
 });
+
+Route::get('/articles/{article}', 'ArticlesController@show');
+
+Route::get('/articles', 'ArticlesController@index');
 
 
 /* 
