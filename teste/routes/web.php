@@ -19,7 +19,12 @@ Route::get('/test', function () {
 });
 
 Route::get('/about', function () {
-    return view('about');
+    $articles = App\Article::latest()->get();
+    //  take(3)->latest()->get(); to see the 3 most recent articles
+    
+    return view('about', [
+        'articles' => $articles
+    ]);
 });
 
 
