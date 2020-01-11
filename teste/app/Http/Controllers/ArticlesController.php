@@ -7,13 +7,6 @@ use App\Article;
 
 class ArticlesController extends Controller
 {
-    public function show ($id)  //shows a single one 
-    {
-        $article = Article::find($id);
-
-        return view('articles.show', ['article'=>$article]);
-    }
-
     public function index ()    //shows a list
     {
         $article = Article::latest()->get();
@@ -21,6 +14,13 @@ class ArticlesController extends Controller
         return view('articles.index', ['articles'=> $article]);
     }
     
+    public function show (Article $article)  //shows a single one 
+    {
+        // $article = Article::findOrFail($id);     To use this line you need to modify the parameter "($id)"
+
+        return view('articles.show', ['article'=>$article]);
+    }
+
     public function create ()   //shows a view to create a new one
     {
         return view('articles.create');
@@ -45,14 +45,12 @@ class ArticlesController extends Controller
         return redirect('/articles');
     }
 
-    public function edit ($id)     //shows a view to edit an existing one
+    public function edit (Article $article)     //shows a view to edit an existing one
     {   
-        $article = Article::find($id);
-
         return view('articles.edit', compact('article'));     // ['article' => $article] is the same for: compact('article')
     }
 
-    public function update ($id)   //persist the edit
+    public function update (Article $article)   //persist the edit
     {
         request()->validate([
             'title' => 'required',
@@ -61,8 +59,6 @@ class ArticlesController extends Controller
         ]);
 
 
-        $article = Article::find($id);
-        
         $article->title = request('title');
         $article->excerpt = request('excerpt');
         $article->body = request('body');
