@@ -38,14 +38,23 @@ class ArticlesController extends Controller
         return redirect('/articles');
     }
 
-    public function edit ()     //shows a view to edit an existing one
-    {
+    public function edit ($id)     //shows a view to edit an existing one
+    {   
+        $article = Article::find($id);
 
+        return view('articles.edit', compact('article'));     // ['article' => $article] is the same for: compact('article')
     }
 
-    public function update ()   //persist the edit
+    public function update ($id)   //persist the edit
     {
+        $article = Article::find($id);
+        
+        $article->title = request('title');
+        $article->excerpt = request('excerpt');
+        $article->body = request('body');
+        $article->save();
 
+        return redirect('/articles/' . $article->id);
     }
 
     public function destroy ()  //delete 
