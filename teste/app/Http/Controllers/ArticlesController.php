@@ -22,28 +22,27 @@ class ArticlesController extends Controller
     
     public function show (Article $article)  //shows a single one 
     {
-        // $article = Article::findOrFail($id);     To use this line you need to modify the parameter "($id)"
+        // $article = Article::findOrFail($id);     To use this line you need to modify the parameter to "($id)"
 
         return view('articles.show', ['article'=>$article]);
     }
 
     public function create ()   //shows a view to create a new one
     {
-        return view('articles.create');
+        return view('articles.create', [
+            'tags' => Tag::all()
+        ]);
     } 
 
     public function store ()    //persist the new one
     {
-        Article::create($this->validateArticle());
+        $this->validateArticle();
+        $article = new Article(request(['title', 'excerpt', 'body']));
+        $article->user_id = 1; //auth()->id();
+        $article->save();
 
-        // sArticle::create($validatedAttributes);
-
-        // $article = new Article();
-        // $article->title = request('title');
-        // $article->excerpt = request('excerpt');
-        // $article->body = request('body');
-        // $article->save();
-
+        $article->tags()->attach(request('tags'));
+      
         return redirect(route('articles.index'));
     }
 
@@ -55,15 +54,6 @@ class ArticlesController extends Controller
     public function update (Article $article)   //persist the edit
     {
         $article->update($this->validateArticle());
-
-       
-        // $article->title = request('title');
-        // $article->excerpt = request('excerpt');
-        // $article->body = request('body');
-        // $article->save();
-        // return redirect('/articles/' . $article->id);
-
-        //return redirect(route('articles.show', $article));
 
         return redirect($article->path());
     }
@@ -78,7 +68,8 @@ class ArticlesController extends Controller
         return request()->validate([
             'title' => 'required',
             'excerpt' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'tags' => 'exists:tags,id'
         ]);
     }
 }
