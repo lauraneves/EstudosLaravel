@@ -38,7 +38,7 @@ class ArticlesController extends Controller
         // $article->body = request('body');
         // $article->save();
 
-        return redirect('/articles');
+        return redirect(route('articles.index'));
     }
 
     public function edit (Article $article)     //shows a view to edit an existing one
@@ -55,8 +55,11 @@ class ArticlesController extends Controller
         // $article->excerpt = request('excerpt');
         // $article->body = request('body');
         // $article->save();
+        // return redirect('/articles/' . $article->id);
 
-        return redirect('/articles/' . $article->id);
+        //return redirect(route('articles.show', $article));
+
+        return redirect($article->path());
     }
 
     public function destroy ()  //delete 
