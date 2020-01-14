@@ -81,11 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    @auth
-                        Hi, {{ Auth::user()->name }}.
-                    @else
-                        Laravel
-                    @endauth
+                    Laravel
                 </div>
 
                 <div class="links">
